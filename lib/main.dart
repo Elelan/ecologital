@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -59,14 +58,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.shopping_cart),
+        ),
+        title: TextField(
+          decoration: InputDecoration(
+              label: Text("Search"), suffixIcon: Icon(Icons.search)),
+          onTap: () {
+            showSearch(context: context, delegate: CustomSearchDelegate());
+          },
+        ),
       ),
       body: Center(
         child: Column(
-
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
@@ -91,37 +98,41 @@ class _MyHomePageState extends State<MyHomePage> {
 class CustomSearchDelegate extends SearchDelegate {
   @override
   List<Widget>? buildActions(BuildContext context) {
-    return ([IconButton(onPressed: (){}, icon: const Icon(Icons.shopping_cart))]);
+    return ([
+      IconButton(onPressed: () {}, icon: const Icon(Icons.close))
+    ]);
   }
 
   @override
   Widget? buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
-    throw UnimplementedError();
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
   }
 
   @override
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults
-    throw UnimplementedError();
+    return Column(
+      children: const [Text("item 1"), Text("item 2")],
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final searchNotifier = Provider.of<SearchNotifier>(context);
-    var results = searchNotifier.search(query);
-    List<String> searchList = ["apple", "orange", "banana"];
-    return Column(
-      children: [
-        
-      ],
-    );
+    return Column();
   }
 }
 
 class SearchNotifier with ChangeNotifier {
   List<String> searchList = ["apple", "orange", "banana"];
+
   Future<List<String>> search(String query) async {
-    return await searchList.where((element) => element.contains(query)).toList(growable: false);
+    return await searchList
+        .where((element) => element.contains(query))
+        .toList(growable: false);
   }
 }
