@@ -6,8 +6,8 @@ import 'package:ecologital/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'transaction_response.dart';
-import 'transactions.dart';
+import '../../data/item.dart';
+import 'list_item.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = "/home";
@@ -19,13 +19,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<TransactionResponse>? response;
+  Future<List<Item>>? response;
   Future<List<Category>>? categories;
 
   @override
   void initState() {
     super.initState();
-    response = fetchTransactions();
+    response = fetchItems();
     categories = fetchCategories();
   }
 
@@ -46,21 +46,24 @@ class _HomePageState extends State<HomePage> {
             //   background: FlexibleBar(),
             // ),
           ),
-
           SliverToBoxAdapter(
             child: Container(
               padding: const EdgeInsets.all(8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Categories"),
-                  Container(
+                  Text(
+                    "Category",
+                    style: AppTheme.titleStyle,
+                  ),
+                  SizedBox(
                     height: 100.0,
                     child: FutureBuilder<List<Category>>(
-                      future: fetchCategories(),
+                      future: categories,
                       builder: (ctx, snapshot) {
-                        if (ConnectionState.active != null && !snapshot.hasData) {
-                          return Center(
+                        if (ConnectionState.active != null &&
+                            !snapshot.hasData) {
+                          return const Center(
                             child: Text("loading..."),
                           );
                         }
@@ -71,19 +74,27 @@ class _HomePageState extends State<HomePage> {
                           );
                         }
                         return ListView.separated(
-                          physics: BouncingScrollPhysics(),
-                          separatorBuilder: (context, index) => SizedBox(width: 10,),
+                          physics: const BouncingScrollPhysics(),
+                          separatorBuilder: (context, index) => const SizedBox(
+                            width: 10,
+                          ),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             Category cat = snapshot.data![index];
                             return Chip(
-                              avatar: Image.network(cat.image, color: Colors.white,),
+                              avatar: Image.network(
+                                cat.image,
+                                color: Colors.white,
+                              ),
                               label: Text(cat.name),
                               backgroundColor: AppTheme.accentColor,
-                              padding: EdgeInsets.all(8),
-                              labelStyle: TextStyle(color: Colors.white),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 16),
+                              labelStyle: AppTheme.buildAppTheme()
+                                  .textTheme
+                                  .labelMedium,
                             );
                           },
                         );
@@ -94,47 +105,35 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          SliverList(
-            delegate:
-                SliverChildBuilderDelegate((BuildContext context, int index) {
-              return FutureBuilder(
-                future: response,
-                builder: (BuildContext context,
-                    AsyncSnapshot<TransactionResponse> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    Transactions response =
-                        snapshot.data!.transactionsList[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ListTile(
-                        title: Text(
-                          response.name,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+          SliverToBoxAdapter(
+            child: FutureBuilder<List<Item>>(
+              future: response,
+              builder: (context, snapshot) {
+                if (ConnectionState.active != null && !snapshot.hasData) {
+                  return const Center(
+                    child: Text("loading..."),
+                  );
+                }
+
+                if (ConnectionState.done != null && snapshot.hasError) {
+                  return Center(
+                    child: Text("Error ${snapshot.error}"),
+                  );
+                }
+
+                return ListView.separated(
+                    physics: const BouncingScrollPhysics(),
+                    separatorBuilder: (context, index) => Container(
+                          height: 4,
+                          color: AppTheme.bgColor,
                         ),
-                        subtitle: Text(response.type),
-                        trailing: response.amount.isNegative
-                            ? Text(
-                                "${response.amount.toString()}\$",
-                                style: const TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              )
-                            : Text(
-                                "${response.amount.toString()}\$",
-                                style: const TextStyle(color: Colors.green),
-                              ),
-                      ),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              );
-            }, childCount: 17),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) =>
+                        ListItem(item: snapshot.data![index]));
+              },
+            ),
           ),
         ],
       ),
@@ -149,12 +148,12 @@ class _HomePageState extends State<HomePage> {
         .toList();
   }
 
-  Future<TransactionResponse> fetchTransactions() async {
-    String resultJson = await rootBundle.loadString(Constants.transactionsURL);
-    Map<String, dynamic> result = jsonDecode(resultJson);
-    TransactionResponse transactionResponse =
-        TransactionResponse.fromJson(result);
-    return transactionResponse;
+  Future<List<Item>> fetchItems() async {
+    await Future.delayed(const Duration(seconds: 3));
+    String resultJson = await rootBundle.loadString(Constants.itemsURL);
+    return (jsonDecode(resultJson) as List)
+        .map((item) => Item.fromJson(item))
+        .toList();
   }
 }
 
@@ -207,7 +206,7 @@ class Constants {
       Color.fromARGB(255, 225, 236, 241);
 
 //endpoints
-  static const transactionsURL = "assets/data/transactions.json";
+  static const itemsURL = "assets/data/items.json";
   static const categoriesURL = "assets/data/categories.json";
 }
 
