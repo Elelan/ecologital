@@ -1,0 +1,104 @@
+[
+  {
+    "_id": "6393264316c9ce0d05aed145",
+    "name": "Chicken Club Sandwitch",
+    "image": "https://www.vmcdn.ca/f/files/glaciermedia/import/lmp-all/1693563-TC-381308-web-thumbnail-Club-Sandwich.jpg",
+    "category_id": "6393203716c9ce0d05a63b14",
+    "categoty_name": "Main Dish",
+    "price": 900,
+    "unit_type": null,
+    "description": "Duis proident labore aliquip eiusmod proident exercitation nulla esse esse labore consequat consequat. Enim sit minim eiusmod ea consectetur pariatur aute occaecat aute consectetur et ea incididunt laborum. Ullamco proident id est do tempor. Nostrud aute ex officia ipsum exercitation incididunt tempor deserunt ut incididunt aliqua. Aliqua velit duis exercitation deserunt nisi minim voluptate eiusmod aute pariatur culpa qui.\r\n"
+  },
+  {
+    "_id": "6393264316c9ce0d05aed146",
+    "name": "Chicken Fried Rice",
+    "image": "https://hips.hearstapps.com/hmg-prod/images/chicken-fried-rice-vertical-1545488815.png?crop=1.00xw:0.376xh;0,0.343xh&resize=480:*",
+    "category_id": "6393203716c9ce0d05a63b14",
+    "categoty_name": "Main Dish",
+    "price": 600,
+    "unit_type": [
+      {
+        "name": "Size",
+        "value": "Regular",
+        "price": 600
+      },
+      {
+        "name": "Size",
+        "value": "Large",
+        "price": 800
+      }
+    ],
+    "description": "Consectetur id mollit amet occaecat pariatur anim voluptate nulla proident enim. Quis in culpa mollit anim reprehenderit. Qui non elit laborum fugiat deserunt cillum in et enim non velit amet non dolor. Eu sit aliquip ut esse ipsum commodo commodo laborum nostrud sint quis anim enim. Fugiat nostrud magna nostrud dolor consequat laboris irure aute eiusmod mollit reprehenderit sint nisi deserunt. Minim elit qui Lorem culpa ipsum minim commodo. Cillum culpa minim dolore deserunt dolore qui incididunt voluptate.\r\n"
+  },
+  {
+    "_id": "6393264316c9ce0d05aed147",
+    "name": "Chicken Pizza",
+    "image": "https://media-cdn.tripadvisor.com/media/photo-s/08/b3/38/cf/pizza-milano.jpg",
+    "category_id": "6393203716c9ce0d05a63b14",
+    "categoty_name": "Main Dish",
+    "price": 950,
+    "unit_type": [
+      {
+        "name": "Size",
+        "value": "M",
+        "price": 950
+      },
+      {
+        "name": "Size",
+        "value": "L",
+        "price": 1250
+      }
+    ],
+    "description": "Labore exercitation adipisicing occaecat velit officia commodo occaecat laboris qui cupidatat veniam fugiat. Veniam laborum cillum anim ullamco qui non aliqua ad veniam velit adipisicing nostrud. Nostrud laborum do est dolore aliquip consequat id. Et ut do minim minim aliqua tempor amet est. Proident excepteur pariatur deserunt cillum velit aliqua incididunt voluptate laborum.\r\n"
+  },
+  {
+    "_id": "6393264316c9ce0d05aed148",
+    "name": "Fruit Salad",
+    "image": "https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_16:9/k%2Farchive%2F0e15ab9363426d8b4a2dc0cffa971e925a361a71",
+    "category_id": "6393260916c9ce0d05ae8511",
+    "categoty_name": "Dessert",
+    "price": 550,
+    "unit_type": null,
+    "description": "Qui adipisicing do pariatur eiusmod consectetur. Aliquip mollit fugiat voluptate consectetur commodo excepteur. Mollit elit cupidatat irure reprehenderit quis proident excepteur incididunt sint consectetur labore nisi officia excepteur. Consequat ipsum excepteur sint fugiat culpa est ullamco sunt adipisicing. Reprehenderit eiusmod culpa commodo id minim fugiat sit.\r\n"
+  },
+  {
+    "_id": "6393264316c9ce0d05aed149",
+    "name": "Puding",
+    "image": "https://static.sehatq.com/cdn-cgi/image/f=auto,width=330,fit=pad,background=white,quality=100/content/review/image/1646413254.jpeg",
+    "category_id": "6393260916c9ce0d05ae8511",
+    "categoty_name": "Dessert",
+    "price": 250,
+    "unit_type": null,
+    "description": "Nulla id magna esse cillum amet aute consequat tempor sunt reprehenderit ullamco fugiat. Officia duis dolore voluptate dolore. Qui pariatur occaecat eiusmod consequat laboris sint tempor dolor sunt esse. Velit qui reprehenderit esse aute cupidatat nisi officia. Deserunt consectetur magna enim ullamco minim irure labore id minim sit aute Lorem aliqua.\r\n"
+  },
+  {
+    "_id": "6393264316c9ce0d05aed14a",
+    "name": "Chicken Burger",
+    "image": "https://images.immediate.co.uk/production/volatile/sites/2/2017/06/Butchies-2.jpg?resize=768,574",
+    "category_id": "6393203716c9ce0d05a63b14",
+    "categoty_name": "Main Dish",
+    "price": 940,
+    "unit_type": null,
+    "description": "Dolor tempor id quis id cillum id. Aute excepteur commodo est magna cillum eiusmod nostrud qui. Lorem ullamco deserunt do ad sint incididunt amet sint occaecat mollit. Proident magna occaecat mollit non velit. Exercitation quis voluptate officia velit culpa sint excepteur ullamco sunt minim.\r\n"
+  },
+  {
+    "_id": "6393264316c9ce0d05aed14b",
+    "name": "Gulab Jamun",
+    "image": "https://5.imimg.com/data5/ZY/FJ/ZL/SELLER-3260990/gulab-jamun-mix-500x500.jpg",
+    "category_id": "6393260916c9ce0d05ae8511",
+    "categoty_name": "Dessert",
+    "price": 280,
+    "unit_type": null,
+    "description": "Enim deserunt aliquip esse laborum tempor sunt proident dolor nostrud non est. Laboris dolore quis et sunt sunt amet esse enim. Cillum incididunt reprehenderit ex sit ea ea eu voluptate mollit officia voluptate pariatur occaecat. In dolor ea labore ex.\r\n"
+  },
+  {
+    "_id": "6393264316c9ce0d05aed14c",
+    "name": "Vadalapam",
+    "image": "https://makanan.shophere.lk/wp-content/uploads/2020/05/d56040279648527ed25dd02132074824.jpg",
+    "category_id": "6393260916c9ce0d05ae8511",
+    "categoty_name": "Dessert",
+    "price": 200,
+    "unit_type": null,
+    "description": "Mollit dolore dolore adipisicing occaecat ad. Nulla aliquip eiusmod non dolor reprehenderit esse excepteur incididunt amet occaecat aliqua voluptate nostrud aliquip. Enim cillum anim quis in ad cillum pariatur elit pariatur mollit. Fugiat amet fugiat velit voluptate ipsum exercitation commodo magna officia reprehenderit cupidatat. Eu ullamco in excepteur esse aute sit. Mollit fugiat mollit do aliquip veniam. Anim Lorem ea esse nostrud dolore.\r\n"
+  }
+]
