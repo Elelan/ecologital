@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Category",
                     style: AppTheme.titleStyle,
                   ),
@@ -106,33 +106,37 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SliverToBoxAdapter(
-            child: FutureBuilder<List<Item>>(
-              future: response,
-              builder: (context, snapshot) {
-                if (ConnectionState.active != null && !snapshot.hasData) {
-                  return const Center(
-                    child: Text("loading..."),
-                  );
-                }
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              color: AppTheme.bgColor,
+              child: FutureBuilder<List<Item>>(
+                future: response,
+                builder: (context, snapshot) {
+                  if (ConnectionState.active != null && !snapshot.hasData) {
+                    return const Center(
+                      child: Text("loading..."),
+                    );
+                  }
 
-                if (ConnectionState.done != null && snapshot.hasError) {
-                  return Center(
-                    child: Text("Error ${snapshot.error}"),
-                  );
-                }
+                  if (ConnectionState.done != null && snapshot.hasError) {
+                    return Center(
+                      child: Text("Error ${snapshot.error}"),
+                    );
+                  }
 
-                return ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    separatorBuilder: (context, index) => Container(
-                          height: 4,
-                          color: AppTheme.bgColor,
-                        ),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) =>
-                        ListItem(item: snapshot.data![index]));
-              },
+                  return ListView.separated(
+                      physics: const BouncingScrollPhysics(),
+                      separatorBuilder: (context, index) => Container(
+                            height: 4,
+                            color: AppTheme.bgColor,
+                          ),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) =>
+                          ListItem(item: snapshot.data![index]));
+                },
+              ),
             ),
           ),
         ],

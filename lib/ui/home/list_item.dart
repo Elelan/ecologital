@@ -13,16 +13,20 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      clipBehavior: Clip.antiAlias,
-      elevation: 8,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      // clipBehavior: Clip.antiAlias,
       child: Container(
         height: 120,
-        padding: const EdgeInsets.all(0),
+        padding: const EdgeInsets.all(8),
         child: Row(children: [
           Expanded(
             flex: 6,
             child: Container(
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
                       image: NetworkImage(item.image), fit: BoxFit.fill)),
             ),
