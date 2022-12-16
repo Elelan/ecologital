@@ -13,6 +13,11 @@ class AppTheme {
       fontWeight: FontWeight.bold
   );
 
+  static const titleStyle2 = TextStyle(
+      color: AppTheme.textColor,
+      fontSize: 16,
+  );
+
   static const subTextStyle = TextStyle(
       color: AppTheme.textColor,
       fontSize: 12,

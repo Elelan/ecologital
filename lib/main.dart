@@ -1,5 +1,9 @@
+
+import 'package:ecologital/providers/category_provider.dart';
 import 'package:ecologital/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import 'app/app.dart';
 
@@ -13,7 +17,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: Theme(

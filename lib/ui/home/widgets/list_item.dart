@@ -1,7 +1,7 @@
-import 'package:ecologital/data/item.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils/theme.dart';
+import '../../../data/item.dart';
+import '../../../utils/theme.dart';
 
 const double imageHeight = 120;
 
@@ -26,12 +26,12 @@ class ListItem extends StatelessWidget {
             flex: 6,
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
                       image: NetworkImage(item.image), fit: BoxFit.fill)),
             ),
           ),
-          Spacer(
+          const Spacer(
             flex: 1,
           ),
           Expanded(
@@ -42,22 +42,26 @@ class ListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text(item.name,
-                      style: AppTheme.titleStyle
+                  Text(item.name, style: AppTheme.titleStyle),
+                  const SizedBox(
+                    height: 8,
                   ),
-                  const SizedBox(height: 8,),
                   Text(item.description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTheme.subTextStyle
+                      style: AppTheme.subTextStyle),
+                  const SizedBox(
+                    height: 8,
                   ),
-                  const SizedBox(height: 8,),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(item.categoryName, style: AppTheme.titleStyle,),
+                        Text(
+                          item.categoryName,
+                          style: AppTheme.titleStyle,
+                        ),
                         Text("Rs ${item.price}", style: AppTheme.titleStyle)
                       ],
                     ),
@@ -68,13 +72,14 @@ class ListItem extends StatelessWidget {
           ),
           Expanded(
               flex: 2,
-              child: Container(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: IconButton(
-                      onPressed: () {}, icon: Icon(Icons.favorite_border,
-                    color: AppTheme.accentColor,)),
-                ),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.favorite_border,
+                      color: AppTheme.accentColor,
+                    )),
               ))
         ]),
       ),
