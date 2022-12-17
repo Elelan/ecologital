@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import 'app/app.dart';
 import 'service/api_service.dart';
+import 'ui/details/details_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
         getPages: [
           GetPage(name: HomePage.routeName, page: () => HomePage()),
           GetPage(name: CartPage.routeName, page: () => CartPage()),
-          GetPage(name: CategoryPage.routeName, page: () => CategoryPage())
+          GetPage(name: CategoryPage.routeName, page: () => CategoryPage()),
+          GetPage(name: DetailsPage.routeName, page: () => DetailsPage())
         ],
       ),
     );

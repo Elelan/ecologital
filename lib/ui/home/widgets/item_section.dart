@@ -1,8 +1,9 @@
+import 'package:ecologital/ui/details/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../home_controller.dart';
 import '../../../utils/theme.dart';
+import '../home_controller.dart';
 import 'list_item.dart';
 
 class ItemSection extends StatelessWidget {
@@ -17,25 +18,28 @@ class ItemSection extends StatelessWidget {
         color: AppTheme.bgColor,
         child: Obx(() => controller.itemLoading
             ? const Center(
-          child: CircularProgressIndicator(),
-        )
+                child: CircularProgressIndicator(),
+              )
             : controller.itemList.isEmpty
-            ? const Center(
-          child: Text("No data", style: TextStyle(color: Colors.black),),
-        )
-            : ListView.separated(
-          padding: const EdgeInsets.only(top: 8),
-            physics: const BouncingScrollPhysics(),
-            separatorBuilder: (context, index) => SizedBox(
-              height: 6,
-              // color: AppTheme.bgColor,
-            ),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: controller.itemList.length,
-            itemBuilder: (context, index) =>
-                ListItem(item: controller.itemList[index]))
-        )
-    );
+                ? const Center(
+                    child: Text(
+                      "No data",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.only(top: 8),
+                    physics: const BouncingScrollPhysics(),
+                    separatorBuilder: (context, index) => SizedBox(
+                          height: 6,
+                          // color: AppTheme.bgColor,
+                        ),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: controller.itemList.length,
+                    itemBuilder: (context, index) => ListItem(
+                          item: controller.itemList[index],
+                          onClick: () => Get.toNamed(DetailsPage.routeName),
+                        ))));
   }
 }

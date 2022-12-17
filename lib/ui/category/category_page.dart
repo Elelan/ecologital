@@ -17,11 +17,6 @@ class CategoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (categoryId == null) {
-      return const Center(
-        child: Text("Category not found"),
-      );
-    }
     return Scaffold(
       appBar: AppBar(
         title: Text(categoryName!),
@@ -31,18 +26,35 @@ class CategoryPage extends StatelessWidget {
       ),
       body: Container(
         color: AppTheme.bgColor,
-        child: Obx(() => ListView.separated(
-            padding: const EdgeInsets.only(top: 8),
-            physics: const BouncingScrollPhysics(),
-            separatorBuilder: (context, index) => SizedBox(
-              height: 6,
-              // color: AppTheme.bgColor,
-            ),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: controller.itemList.length,
-            itemBuilder: (context, index) =>
-                ListItem(item: controller.itemList[index]))),
+        child: Obx(() {
+          if (categoryId == null) {
+            return const Center(
+              child: Text("Category not found"),
+            );
+          }
+
+          if (controller.isDataProcessing.value == true) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppTheme.accentColor,
+              ),
+            );
+          }
+          return ListView.separated(
+              padding: const EdgeInsets.only(top: 8),
+              physics: const BouncingScrollPhysics(),
+              separatorBuilder: (context, index) => SizedBox(
+                    height: 6,
+                    // color: AppTheme.bgColor,
+                  ),
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemCount: controller.itemList.length,
+              itemBuilder: (context, index) => ListItem(
+                    item: controller.itemList[index],
+                    onClick: () {},
+                  ));
+        }),
       ),
     );
   }
