@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/home_controller.dart';
+import '../home_controller.dart';
 import '../../../utils/theme.dart';
 import 'list_item.dart';
 
@@ -34,7 +34,8 @@ class ItemSection extends StatelessWidget {
             scrollDirection: Axis.vertical,
             itemCount: controller.itemList.length,
             itemBuilder: (context, index) =>
-                ListItem(item: controller.itemList[index])))
+                ListItem(item: controller.itemList[index]))
+        )
     );
   }
 }

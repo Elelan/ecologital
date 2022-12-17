@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 
-import '../data/category.dart';
-import '../data/item.dart';
-import '../service/api_service.dart';
+import '../../data/category.dart';
+import '../../data/item.dart';
+import '../../service/api_service.dart';
 
 class HomeController extends GetxController {
-  final api = Get.put(ApiService());
+  final api = Get.find<ApiService>();
 
   final _categoryLoading = false.obs;
 
@@ -26,8 +26,7 @@ class HomeController extends GetxController {
 
   void fetchCategories() async {
     _categoryLoading.value = true;
-    await Future.delayed(const Duration(seconds: 4));
-    categoryList.value = await ApiService.fetchCategories();
+    categoryList.value = await api.fetchCategories();
     _categoryLoading.value = false;
   }
 

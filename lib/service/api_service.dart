@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:ecologital/data/item.dart';
 import "package:http/http.dart" as http;
 
@@ -6,7 +7,7 @@ import '../app/constants.dart';
 import '../data/category.dart';
 
 class ApiService {
-  static Future<List<Category>> fetchCategories() async {
+  Future<List<Category>> fetchCategories() async {
     var headers = {'api-key': Constants.apiKey};
     const url = "${Constants.baseUrl}/categories";
     final uri = Uri.parse(url);
@@ -19,9 +20,12 @@ class ApiService {
     return [];
   }
 
-  Future<List<Item>> fetchItems() async {
+  Future<List<Item>> fetchItems({String categoryId = "", int page = 1}) async {
     var headers = {'api-key': Constants.apiKey};
-    const url = "${Constants.baseUrl}/items";
+    // const url = "${Constants.baseUrl}/items";
+    var url = categoryId != ""
+        ? "${Constants.baseUrl}/items?page=$page&category_id=$categoryId"
+        : "${Constants.baseUrl}/items";
     final uri = Uri.parse(url);
     final response = await http.get(uri, headers: headers);
     if (response.statusCode == 200) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controller/home_controller.dart';
+import 'home_controller.dart';
 import '../../utils/theme.dart';
 import 'widgets/app_bar_row.dart';
 import 'widgets/category_section.dart';
@@ -20,15 +20,21 @@ class HomePage extends StatelessWidget {
       body: CustomScrollView(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics()
+        ),
         slivers: [
-          SliverAppBar(
+          SliverPadding(padding: const EdgeInsets.only(bottom: 16),
+          sliver: SliverAppBar(
             elevation: 0,
             title: AppBarRow(),
+            titleSpacing: 16,
             backgroundColor: Colors.white,
-            pinned: true,
+            // pinned: true,
             floating: true,
             snap: true,
-          ),
+          ),),
+
           SliverToBoxAdapter(
             child: Container(
               padding: const EdgeInsets.all(8),

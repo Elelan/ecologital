@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../utils/theme.dart';
+import '../../cart/cart_page.dart';
 import 'custom_search_delegate.dart';
 
 class AppBarRow extends StatelessWidget {
@@ -17,7 +19,13 @@ class AppBarRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.shopping_cart_outlined)),
+              onPressed: () {
+                Get.toNamed(CartPage.routeName);
+              },
+              icon: const Icon(
+                Icons.shopping_cart_outlined,
+                color: AppTheme.textColor,
+              )),
           Expanded(
             child: Container(
               height: 50,
@@ -34,7 +42,11 @@ class AppBarRow extends StatelessWidget {
                   focusNode.unfocus();
                 },
                 decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.search), label: Text("Search")),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: AppTheme.textColor,
+                    ),
+                    label: Text("Search")),
               ),
             ),
           ),
