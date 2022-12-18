@@ -1,3 +1,4 @@
+import '../home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +9,7 @@ import 'custom_search_delegate.dart';
 class AppBarRow extends StatelessWidget {
   AppBarRow({Key? key}) : super(key: key);
 
+  final controller = Get.find<HomeController>();
   final FocusNode focusNode = FocusNode();
 
   @override
@@ -34,9 +36,14 @@ class AppBarRow extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30)),
               child: TextField(
                 focusNode: focusNode,
-                onTap: () {
-                  showSearch(
+                onTap: () async {
+                  final result = await showSearch(
                       context: context, delegate: CustomSearchDelegate());
+                  if (result != null) {
+                    controller.navigateToDetail(result);
+                  }
+                  focusNode.unfocus();
+                  focusNode.removeListener(() { });
                 },
                 onTapOutside: (event) {
                   focusNode.unfocus();
