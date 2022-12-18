@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import '../home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,7 +10,10 @@ const double imageHeight = 120;
 
 class ListItem extends StatelessWidget {
 
-  ListItem({Key? key, required this.item, required this.onClick}) : super(key: key);
+  ListItem({Key? key, required this.item, required this.onClick})
+      : super(key: key);
+
+  final controller = Get.find<HomeController>();
 
   final Item item;
   final void Function()? onClick;
@@ -36,7 +40,8 @@ class ListItem extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: DecorationImage(
-                        image: CachedNetworkImageProvider(item.image), fit: BoxFit.fill)),
+                        image: CachedNetworkImageProvider(item.image),
+                        fit: BoxFit.fill)),
               ),
             ),
             const Spacer(
@@ -82,14 +87,17 @@ class ListItem extends StatelessWidget {
                 flex: 2,
                 child: Align(
                   alignment: Alignment.topCenter,
-                  child: Obx(() => IconButton(
-                      onPressed: () {
-                        isFavourite(!isFavourite.value);
-                      },
-                      icon: Icon(
-                        isFavourite.value ? Icons.favorite : Icons.favorite_border,
-                        color: AppTheme.accentColor,
-                      ))),
+                  child: Obx(() =>
+                      IconButton(
+                          onPressed: () {
+                            isFavourite(!isFavourite.value);
+                            controller.updateFavourite(item, isFavourite.value);
+                          },
+                          icon: Icon(
+                            isFavourite.value ? Icons.favorite : Icons
+                                .favorite_border,
+                            color: AppTheme.accentColor,
+                          ))),
                 ))
           ]),
         ),

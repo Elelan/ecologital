@@ -70,6 +70,7 @@ class CustomSearchDelegate extends SearchDelegate<Item?> {
           final remainingText = suggestion.name.substring(query.length);
 
           return ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 32),
             onTap: () {
               query = suggestion.name;
 
