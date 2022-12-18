@@ -1,16 +1,12 @@
-
-import 'package:ecologital/providers/category_provider.dart';
-import 'package:ecologital/ui/cart/cart_page.dart';
-import 'package:ecologital/ui/category/category_page.dart';
-import 'package:ecologital/ui/home/home_page.dart';
-import 'package:ecologital/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
-import 'app/app.dart';
 import 'service/api_service.dart';
+import 'ui/cart/cart_page.dart';
+import 'ui/category/category_page.dart';
 import 'ui/details/details_page.dart';
+import 'ui/home/home_page.dart';
+import 'utils/theme.dart';
 
 void main() {
   runApp(const MyApp());

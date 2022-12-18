@@ -40,20 +40,25 @@ class CategoryPage extends StatelessWidget {
               ),
             );
           }
-          return ListView.separated(
-              padding: const EdgeInsets.only(top: 8),
-              physics: const BouncingScrollPhysics(),
-              separatorBuilder: (context, index) => SizedBox(
-                    height: 6,
-                    // color: AppTheme.bgColor,
-                  ),
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              itemCount: controller.itemList.length,
-              itemBuilder: (context, index) => ListItem(
-                    item: controller.itemList[index],
-                    onClick: () {},
-                  ));
+          return Column(
+            children: [
+              ListView.separated(
+                  controller: controller.scrollController,
+                  padding: const EdgeInsets.only(top: 8),
+                  physics: const BouncingScrollPhysics(),
+                  separatorBuilder: (context, index) => const SizedBox(
+                      height: 6,
+                    ),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: controller.itemList.length,
+                  itemBuilder: (context, index) => ListItem(
+                        item: controller.itemList[index],
+                        onClick: () {},
+                      )),
+
+            ],
+          );
         }),
       ),
     );

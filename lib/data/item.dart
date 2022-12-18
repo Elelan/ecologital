@@ -1,5 +1,6 @@
-import 'package:ecologital/data/unit_type.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'unit_type.dart';
 
 part 'item.g.dart';
 
@@ -18,6 +19,9 @@ class Item {
   List<UnitType>? unitType;
   String description;
 
+  @JsonKey(ignore: true)
+  bool isFavourite = false;
+
   Item(
       {required this.id,
       required this.name,
@@ -28,7 +32,7 @@ class Item {
       this.unitType,
       required this.description});
 
-  factory Item.fromJson(Map<String, dynamic> json) =>
-      _$ItemFromJson(json);
+  factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
+
   Map<String, dynamic> toJson() => _$ItemToJson(this);
 }

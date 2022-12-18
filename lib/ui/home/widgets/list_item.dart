@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../data/item.dart';
 import '../../../utils/theme.dart';
@@ -6,10 +8,13 @@ import '../../../utils/theme.dart';
 const double imageHeight = 120;
 
 class ListItem extends StatelessWidget {
-  const ListItem({Key? key, required this.item, required this.onClick}) : super(key: key);
+
+  ListItem({Key? key, required this.item, required this.onClick}) : super(key: key);
 
   final Item item;
   final void Function()? onClick;
+  var isFavourite = false.obs;
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,7 @@ class ListItem extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: DecorationImage(
-                        image: NetworkImage(item.image), fit: BoxFit.fill)),
+                        image: CachedNetworkImageProvider(item.image), fit: BoxFit.fill)),
               ),
             ),
             const Spacer(
@@ -77,12 +82,14 @@ class ListItem extends StatelessWidget {
                 flex: 2,
                 child: Align(
                   alignment: Alignment.topCenter,
-                  child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.favorite_border,
+                  child: Obx(() => IconButton(
+                      onPressed: () {
+                        isFavourite(!isFavourite.value);
+                      },
+                      icon: Icon(
+                        isFavourite.value ? Icons.favorite : Icons.favorite_border,
                         color: AppTheme.accentColor,
-                      )),
+                      ))),
                 ))
           ]),
         ),

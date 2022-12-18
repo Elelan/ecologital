@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,13 +41,13 @@ class CategorySection extends StatelessWidget {
                           elevation: 8.0,
                           padding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 16),
-                          avatar: Image.network(
-                            cat.image,
+                          avatar: CachedNetworkImage(
+                            imageUrl: cat.image,
                             color: Colors.white,
                           ),
                           label: Text(
                             cat.name,
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
                             var data = {

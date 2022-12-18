@@ -1,4 +1,3 @@
-import 'package:ecologital/ui/details/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,30 +15,40 @@ class ItemSection extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         color: AppTheme.bgColor,
-        child: Obx(() => controller.itemLoading
+        child: Obx(() =>
+        controller.itemLoading
             ? const Center(
-                child: CircularProgressIndicator(),
-              )
+          child: CircularProgressIndicator(),
+        )
             : controller.itemList.isEmpty
-                ? const Center(
-                    child: Text(
-                      "No data",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.only(top: 8),
-                    physics: const BouncingScrollPhysics(),
-                    separatorBuilder: (context, index) => SizedBox(
-                          height: 6,
-                          // color: AppTheme.bgColor,
-                        ),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: controller.itemList.length,
-                    itemBuilder: (context, index) => ListItem(
-                          item: controller.itemList[index],
-                          onClick: () => Get.toNamed(DetailsPage.routeName),
-                        ))));
+            ? const Center(
+          child: Text(
+            "No data",
+            style: TextStyle(color: Colors.black),
+          ),
+        )
+            : ListView.separated(
+            padding: const EdgeInsets.only(top: 8),
+            physics: const BouncingScrollPhysics(),
+            separatorBuilder: (context, index) =>
+                const SizedBox(
+                  height: 6,
+                  // color: AppTheme.bgColor,
+                ),
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            itemCount: controller.itemList.length,
+            itemBuilder: (context, index) {
+              var item = controller.itemList[index];
+              return ListItem(
+                item: item,
+                onClick: () {
+                  controller.navigateToDetail(item);
+                },
+              );
+            }
+        )
+        )
+    );
   }
 }

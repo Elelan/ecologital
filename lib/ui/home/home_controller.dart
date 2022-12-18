@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../data/category.dart';
 import '../../data/item.dart';
 import '../../service/api_service.dart';
+import '../details/details_page.dart';
 
 class HomeController extends GetxController {
   final api = Get.find<ApiService>();
@@ -16,6 +18,7 @@ class HomeController extends GetxController {
 
   bool get itemLoading => _itemLoading.value;
   var itemList = List<Item>.empty().obs;
+  Item? selectedItem;
 
   @override
   void onInit() {
@@ -34,5 +37,17 @@ class HomeController extends GetxController {
     _itemLoading.value = true;
     itemList.value = await api.fetchItems();
     _itemLoading.value = false;
+  }
+
+  void navigateToDetail(Item itemSelected) {
+    selectedItem = itemSelected;
+    Get.toNamed(DetailsPage.routeName);
+  }
+
+  showSnackBar(String title, String message, Color backgroundColor) {
+    Get.snackbar(title, message,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: backgroundColor,
+        colorText: Colors.white);
   }
 }

@@ -7,10 +7,21 @@ class AppTheme {
   static const Color bgColor = Color(0xFFEDEFF3);
   static const Color textColor = Color(0xFF3E5481);
 
+  static const moneyStyle = TextStyle(
+      color: AppTheme.textColor,
+      fontSize: 21,
+      fontWeight: FontWeight.bold
+  );
+
   static const titleStyle = TextStyle(
       color: AppTheme.textColor,
-      fontSize: 16,
+      fontSize: 18,
       fontWeight: FontWeight.bold
+  );
+
+  static const bodyStyle = TextStyle(
+      color: AppTheme.textColor,
+      fontSize: 16,
   );
 
   static const titleStyle2 = TextStyle(

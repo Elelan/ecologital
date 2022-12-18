@@ -13,6 +13,7 @@ class CategoryController extends GetxController {
   int get page => _page.value;
   var isMoreDataAvailable = true.obs;
   var isDataProcessing = false.obs;
+  var fetchingMoreDta = false.obs;
 
   final _categoryId = "".obs;
 
@@ -56,6 +57,7 @@ class CategoryController extends GetxController {
   // Get More data
   void getMoreTask(int page) async {
     try {
+      fetchingMoreDta(true);
       var newList = await api.fetchItems(categoryId: categoryId, page: page);
       if(newList.isNotEmpty) {
         isMoreDataAvailable(true);
@@ -64,8 +66,10 @@ class CategoryController extends GetxController {
         showSnackBar("Message", "No more items", Colors.lightBlueAccent);
       }
       itemList.addAll(newList);
+      fetchingMoreDta(false);
     } catch (exception) {
       isMoreDataAvailable(false);
+      fetchingMoreDta(false);
       showSnackBar("Exception", exception.toString(), Colors.red);
     }
   }
