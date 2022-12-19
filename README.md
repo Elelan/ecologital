@@ -13,6 +13,10 @@ for HTTP client, [json_serializable](https://pub.dev/packages/json_serializable)
 ## Getting Started
 
 For getting started with flutter view Flutter [documentation](https://flutter.dev).
+```
+Flutter (Channel beta, 3.7.0-1.1.pre, on macOS 13.1 22C65 darwin-arm64, locale en)
+```
+
 
 - Clone this repository `https://github.com/Elelan/ecologital.git`
 - Navigate to cloned folder `cd ecologital`
