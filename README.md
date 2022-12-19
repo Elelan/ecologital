@@ -1,16 +1,18 @@
-# ecologital
+# Ecologital Assignment
 
 Ecologital Assignment Flutter (SSE)
 
+In this project, I use [GetX](https://pub.dev/packages/get) for state management, [http](https://pub.dev/packages/http)
+for HTTP client, [json_serializable](https://pub.dev/packages/json_serializable) for serialization
+
+
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+For getting started with flutter view Flutter [documentation](https://flutter.dev).
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Clone this repository `https://github.com/Elelan/ecologital.git`
+- Navigate to cloned folder `cd ecologital`
+- open terminal
+- Get packages using `flutter pub get`
+- Run build_runner `flutter pub run build_runner build`
+- Run `flutter run` 
