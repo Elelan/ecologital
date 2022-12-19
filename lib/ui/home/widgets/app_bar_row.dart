@@ -1,11 +1,10 @@
-import 'package:ecologital/ui/cart/cart_controller.dart';
-
-import '../home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/theme.dart';
+import '../../cart/cart_controller.dart';
 import '../../cart/cart_page.dart';
+import '../home_controller.dart';
 import 'custom_search_delegate.dart';
 
 class AppBarRow extends StatelessWidget {
@@ -28,14 +27,13 @@ class AppBarRow extends StatelessWidget {
                 Get.toNamed(CartPage.routeName);
               },
               icon: Obx(() => Badge(
-                isLabelVisible: cartController.cartItems.isNotEmpty,
-                label: Text("${cartController.cartItems.length}"),
-                child: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: AppTheme.textColorDark,
-                ),
-              ))
-          ),
+                    isLabelVisible: cartController.cartItems.isNotEmpty,
+                    label: Text("${cartController.cartItems.length}"),
+                    child: const Icon(
+                      Icons.shopping_cart_outlined,
+                      color: AppTheme.textColorDark,
+                    ),
+                  ))),
           Expanded(
             child: Container(
               height: 50,
@@ -51,7 +49,7 @@ class AppBarRow extends StatelessWidget {
                     controller.navigateToDetail(result.id);
                   }
                   focusNode.unfocus();
-                  focusNode.removeListener(() { });
+                  focusNode.removeListener(() {});
                 },
                 onTapOutside: (event) {
                   focusNode.unfocus();

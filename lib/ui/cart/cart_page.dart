@@ -49,59 +49,62 @@ class CartPage extends StatelessWidget {
                   bottom: 0,
                   right: 0,
                   left: 0,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 32, right: 32, bottom: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              "Total",
-                              style: TextStyle(
-                                  color: AppTheme.textColorDark,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "Rs 1750.00",
-                              style: TextStyle(
-                                  color: AppTheme.textColorDark,
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 32, right: 32, bottom: 16),
-                        child: MaterialButton(
-                          onPressed: () {
-                            //
-                          },
-                          height: 50,
-                          elevation: 0,
-                          color: AppTheme.accentColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: const Center(
-                            child: Text(
-                              "Place order",
-                              style: TextStyle(color: AppTheme.textColorLight),
-                            ),
+                  child: Obx(() => Visibility(
+                    visible: controller.cartItems.isNotEmpty,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 32, right: 32, bottom: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Total",
+                                style: TextStyle(
+                                    color: AppTheme.textColorDark,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Obx(() => Text(
+                                controller.totalAmount.toStringAsFixed(2),
+                                style: const TextStyle(
+                                    color: AppTheme.textColorDark,
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                            ],
                           ),
                         ),
-                      )
-                    ],
-                  ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 32, right: 32, bottom: 16),
+                          child: MaterialButton(
+                            onPressed: () {
+                              //
+                            },
+                            height: 50,
+                            elevation: 0,
+                            color: AppTheme.accentColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Center(
+                              child: Text(
+                                "Place order",
+                                style: TextStyle(color: AppTheme.textColorLight),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
                 ),
               ],
             ),

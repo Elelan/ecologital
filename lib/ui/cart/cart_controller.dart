@@ -12,6 +12,8 @@ class CartController extends GetxController {
   // var cartItems = List<CartItem>.empty().obs;
   var cartItems = List<Cart>.empty().obs;
 
+  var totalAmount = 0.0.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -26,6 +28,7 @@ class CartController extends GetxController {
       final items = json.map((item) => Cart.fromJson(item)).toList();
       if(cartItems.isEmpty) {
         cartItems.addAll(items);
+        updateTotal();
       }
     }
   }
@@ -94,6 +97,17 @@ class CartController extends GetxController {
   void updateCartItem(int index, int count, double totalPrice) {
     cartItems[index].count(count);
     cartItems[index].totalPrice(totalPrice);
+    updateTotal();
+    updateCartStorage(cartItems);
+  }
+
+  void updateTotal() {
+    if(cartItems.isNotEmpty) {
+      var amount = cartItems.map((item) => item.totalPrice.value)
+          .toList()
+          .reduce((price1, price2) => price1 + price2);
+      totalAmount(amount);
+    }
   }
 
   Cart? getCartItem(String id) =>
@@ -113,6 +127,8 @@ class CartController extends GetxController {
     var itemExists = cartItems.firstWhereOrNull((element) => element.id == id);
     if (itemExists != null) {
       cartItems.removeAt(cartItemIndex(id));
+      updateTotal();
+      updateCartStorage(cartItems);
     }
   }
 }
