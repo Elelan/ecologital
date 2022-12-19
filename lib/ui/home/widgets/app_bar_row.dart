@@ -1,3 +1,5 @@
+import 'package:ecologital/ui/cart/cart_controller.dart';
+
 import '../home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,7 @@ class AppBarRow extends StatelessWidget {
   AppBarRow({Key? key}) : super(key: key);
 
   final controller = Get.find<HomeController>();
+  final cartController = Get.find<CartController>();
   final FocusNode focusNode = FocusNode();
 
   @override
@@ -24,10 +27,15 @@ class AppBarRow extends StatelessWidget {
               onPressed: () {
                 Get.toNamed(CartPage.routeName);
               },
-              icon: const Icon(
-                Icons.shopping_cart_outlined,
-                color: AppTheme.textColorDark,
-              )),
+              icon: Obx(() => Badge(
+                isLabelVisible: cartController.cartItems.isNotEmpty,
+                label: Text("${cartController.cartItems.length}"),
+                child: const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: AppTheme.textColorDark,
+                ),
+              ))
+          ),
           Expanded(
             child: Container(
               height: 50,

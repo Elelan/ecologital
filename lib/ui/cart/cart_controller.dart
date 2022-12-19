@@ -1,80 +1,118 @@
+import 'dart:convert';
+
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../data/cart.dart';
 import '../../data/cart_item.dart';
 import '../../data/item.dart';
 import '../../data/unit_type.dart';
-import 'package:get/get.dart';
 
 class CartController extends GetxController {
+  // var cartItems = List<CartItem>.empty().obs;
+  var cartItems = List<Cart>.empty().obs;
 
-  var cartItems = List<CartItem>.empty().obs;
+  @override
+  void onInit() {
+    super.onInit();
+    loadInitialCart();
+  }
 
-  void addToCart(Item item, int quantity, UnitType? type) {
-    var itemExists = cartItems.firstWhereOrNull((element) => element.id == item.id);
-    CartItem newCartItem;
-    var amount = 0.0;
-    if (type != null) {
-      amount = quantity * type.price;
-    } else {
-      amount = quantity * item.price;
-    }
-    if(itemExists!= null) {
-      itemExists.count(quantity);
-      itemExists.amount(amount);
-      cartItems.add(itemExists);
-    } else {
-      newCartItem = CartItem(id: item.id, item: item, count: RxInt(quantity), amount: RxDouble(amount), type: type);
-      cartItems.add(newCartItem);
+  void loadInitialCart() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? cartString = prefs.getString('cart');
+    if(cartString != null && cartString.isNullOrBlank == false) {
+      final json = jsonDecode(cartString) as List;
+      final items = json.map((item) => Cart.fromJson(item)).toList();
+      if(cartItems.isEmpty) {
+        cartItems.addAll(items);
+      }
     }
   }
 
-  double calculateCartItemAmount(Item item, int quantity, UnitType? type) {
+  void addToCartList(Item item, int quantity, UnitType? type) {
+    var itemExists =
+    cartItems.firstWhereOrNull((element) => element.id == item.id);
+    Cart newCartItem;
     var amount = 0.0;
     if (type != null) {
       amount = quantity * type.price;
     } else {
       amount = quantity * item.price;
     }
+    if (itemExists != null) {
+      itemExists.count(quantity);
+      itemExists.totalPrice(amount);
+      cartItems.add(itemExists);
+    } else {
+      var name = _buildCartItemName(item, type);
+      newCartItem = Cart(
+          id: item.id,
+          name: name,
+          count: RxInt(quantity),
+          unitPrice: RxDouble(type != null ? type.price : item.price),
+          totalPrice: RxDouble(amount),
+      image: item.image);
+      cartItems.add(newCartItem);
+    }
+
+    updateCartStorage(cartItems);
+  }
+
+  void updateCartStorage(List<Cart> cartItems) async{
+    try {
+      var dynamic = cartItems.map((item) => item.toJson()).toList();
+      var encoded = jsonEncode(dynamic);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString("cart", encoded);
+    } catch (error) {
+      error.printError();
+    }
+  }
+
+  double calculateCartItemAmount(int quantity, double unitPrice) {
+    var amount = quantity * unitPrice;
     return amount;
   }
 
   void decreaseCartItem(String id) {
     var index = cartItems.indexWhere((element) => element.id == id);
-    var newCount = cartItems[index].count.value - 1;
-    var newAmount = calculateCartItemAmount(cartItems[index].item, newCount, cartItems[index].type);
-    updateCartItem(index, newCount, newAmount);
+    var cartItem = cartItems[index];
+    var newCount = cartItem.count > 1 ? cartItem.count - 1 : cartItem.count;
+    var newAmount = calculateCartItemAmount(newCount.value, cartItem.unitPrice.value);
+    updateCartItem(index, newCount.value, newAmount);
   }
 
   void increaseCartItem(String id) {
     var index = cartItems.indexWhere((element) => element.id == id);
-    var newCount = cartItems[index].count.value + 1;
-    var newAmount = calculateCartItemAmount(cartItems[index].item, newCount, cartItems[index].type);
-    updateCartItem(index, newCount, newAmount);
+    var cartItem = cartItems[index];
+    var newCount = cartItem.count + 1;
+    var newAmount = calculateCartItemAmount(newCount.value, cartItem.unitPrice.value);
+    updateCartItem(index, newCount.value, newAmount);
   }
 
-  void updateCartItem(int index, int count, double amount) {
+  void updateCartItem(int index, int count, double totalPrice) {
     cartItems[index].count(count);
-    cartItems[index].amount(amount);
+    cartItems[index].totalPrice(totalPrice);
   }
 
-  CartItem? getCartItem(String id) => cartItems.firstWhereOrNull((element) => element.id == id);
+  Cart? getCartItem(String id) =>
+      cartItems.firstWhereOrNull((element) => element.id == id);
 
-  String buildCartItemName(String id) {
-    var cartItem = getCartItem(id);
-    if(cartItem == null) {
-      return "N/A";
+  String _buildCartItemName(Item item, UnitType? type) {
+    if (type == null) {
+      return item.name;
     }
-    if(cartItem.type == null) {
-      return cartItem.item.name;
-    }
-    return "${cartItem.item.name} (${cartItem.type?.value})";
+    return "${item.name} (${type.value})";
   }
 
-  int cartItemIndex(String id) => cartItems.indexWhere((element) => element.id == id);
+  int cartItemIndex(String id) =>
+      cartItems.indexWhere((element) => element.id == id);
 
   void removeItemFromCart(String id) {
     var itemExists = cartItems.firstWhereOrNull((element) => element.id == id);
-    if(itemExists != null) {
+    if (itemExists != null) {
       cartItems.removeAt(cartItemIndex(id));
     }
-
   }
 }

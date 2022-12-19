@@ -261,8 +261,7 @@ class DetailsPage extends StatelessWidget {
                       var item = controller.selectedItem!;
                       UnitType? unitType =
                           item.unitType?[selectedUnitIndex.value];
-                      cartController.addToCart(
-                          item, itemNumber.value, unitType);
+                      cartController.addToCartList(item, itemNumber.value, unitType);
                       ScaffoldMessenger.of(context)
                           .showSnackBar(addedToCartSnackbar());
                       Get.back();
