@@ -26,7 +26,7 @@ class AppBarRow extends StatelessWidget {
               },
               icon: const Icon(
                 Icons.shopping_cart_outlined,
-                color: AppTheme.textColor,
+                color: AppTheme.textColorDark,
               )),
           Expanded(
             child: Container(
@@ -51,7 +51,7 @@ class AppBarRow extends StatelessWidget {
                 decoration: const InputDecoration(
                     prefixIcon: Icon(
                       Icons.search,
-                      color: AppTheme.textColor,
+                      color: AppTheme.textColorDark,
                     ),
                     label: Text("Search")),
               ),

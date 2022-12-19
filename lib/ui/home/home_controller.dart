@@ -1,3 +1,4 @@
+import 'package:ecologital/app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,24 +31,30 @@ class HomeController extends GetxController {
 
   final scrollController = ScrollController();
 
-  var categoryList = List<Category>.empty().obs;
+  var categoryList =
+      List<Category>.generate(1, (index) => Constants.homeCategory).obs;
 
-  final _itemLoading = false.obs;
-
-  bool get itemLoading => _itemLoading.value;
-  var itemList = List<Item>.empty().obs;
   Item? selectedItem;
+
+  var selectedCategoryId = "".obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchCategories();
     fetchItems();
+
+    selectedCategoryId.listen((value) {
+      print("category id updated : $value");
+    });
   }
+
+
 
   void fetchCategories() async {
     _categoryLoading.value = true;
-    categoryList.value = await api.fetchCategories();
+    var fetchedCategories = await api.fetchCategories();
+    categoryList.addAll(fetchedCategories);
     _categoryLoading.value = false;
   }
 
@@ -57,9 +64,15 @@ class HomeController extends GetxController {
   }
 
   void fetchItems() async {
-    _itemLoading.value = true;
-    itemList.value = await api.fetchItems();
-    _itemLoading.value = false;
+    fetchFirstItemListForCategory("");
+    paginateItems("");
+  }
+
+  List<Item> getItemsByCategory(String categoryId) {
+    return categoryList
+            .firstWhereOrNull((category) => category.id == categoryId)
+            ?.itemList ??
+        [];
   }
 
   void fetchFirstItemListForCategory(String categoryId) async {
@@ -88,8 +101,6 @@ class HomeController extends GetxController {
         var nextPage =
             categoryList[getCategoryIndex(categoryId)].page(currentPage + 1);
 
-        print("currentPage: $currentPage");
-        print("nextPage: $nextPage");
         var moreItems =
             await api.fetchItems(categoryId: categoryId, page: nextPage);
 
@@ -127,19 +138,31 @@ class HomeController extends GetxController {
   int getCurrentPage(String categoryId) =>
       categoryList[getCategoryIndex(categoryId)].page.value;
 
-  Item getItemById(String id) {
-    return itemList.firstWhere((element) => element.id == id);
-  }
-
   void navigateToDetail(String id) {
-    selectedItem = getItemById(id);
-    String route = DetailsPage.getRouteName(id);
-    Get.toNamed(route);
+    navigateToDetailFromCategory("", id);
   }
 
-  void updateFavourite(Item item, bool favourite) {
-    var index = itemList.indexWhere((element) => element.id == item.id);
-    itemList[index].isFavourite.toggle();
+  void navigateToDetailFromCategory(String categoryId, String id) {
+    var category =
+        categoryList.firstWhereOrNull((category) => category.id == categoryId);
+    var item = category?.itemList.firstWhereOrNull((item) => item.id == id);
+    if (item != null) {
+      selectedItem = item;
+      var args = {"categoryId": categoryId};
+      String route = DetailsPage.getRouteName(id);
+      Get.toNamed(route, arguments: args);
+    } else {
+      showSnackBar("Not found", "Item details not found", Colors.red);
+    }
+  }
+
+  void updateFavourite(String itemId, bool favourite) {
+    var categoryIndex = categoryList
+        .indexWhere((category) => category.id == selectedCategoryId.value);
+    var itemIndex = categoryList[categoryIndex]
+        .itemList
+        .indexWhere((item) => item.id == itemId);
+    categoryList[categoryIndex].itemList[itemIndex].isFavourite(!favourite);
   }
 
   showSnackBar(String title, String message, Color backgroundColor) {

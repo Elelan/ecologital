@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecologital/data/cart_item.dart';
-import 'package:ecologital/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../data/cart_item.dart';
+import '../../../utils/theme.dart';
 import '../../core/widgets/rounded_icon_button.dart';
 import '../cart_controller.dart';
 
@@ -16,7 +16,6 @@ class CartListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: Container(
@@ -47,66 +46,70 @@ class CartListItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           Text(
-                            "${cartItem.item.name}${cartItem.type != null ? '(${cartItem.type?.value})' : ''}",
+                            controller.buildCartItemName(cartItem.id),
                             style: const TextStyle(
-                                color: AppTheme.textColor, fontSize: 16),
+                                fontWeight: FontWeight.bold,
+                                color: AppTheme.textColorDark,
+                                fontSize: 16),
                           ),
-
                           Obx(() => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  RoundedIconButton(
-                                    icon: Icons.remove,
-                                    onPress: () {
-                                      if (cartItem.count.value > 1) {
-                                        //cartItem.count(cartItem.count.value-1);
-                                        controller.decreaseCartItem(cartItem.id);
-                                      }
-                                    },
-                                    iconSize: 24,
-                                    fillColor: Colors.grey.shade300,
-                                    iconColor: Colors.black,
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      RoundedIconButton(
+                                        icon: Icons.remove,
+                                        onPress: () {
+                                          if (cartItem.count.value > 1) {
+                                            //cartItem.count(cartItem.count.value-1);
+                                            controller
+                                                .decreaseCartItem(cartItem.id);
+                                          }
+                                        },
+                                        iconSize: 24,
+                                        fillColor: Colors.grey.shade300,
+                                        iconColor: Colors.black,
+                                      ),
+                                      Container(
+                                        width: 20,
+                                        height: 20,
+                                        alignment: Alignment.center,
+                                        child: Obx(() => Text(
+                                              "${cartItem.count.value}",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            )),
+                                      ),
+                                      RoundedIconButton(
+                                        icon: Icons.add,
+                                        onPress: () {
+                                          //cartItem.count(cartItem.count.value + 1);
+                                          controller
+                                              .increaseCartItem(cartItem.id);
+                                        },
+                                        iconSize: 24,
+                                        fillColor: AppTheme.accentColor,
+                                        iconColor: Colors.white,
+                                      )
+                                    ],
                                   ),
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    alignment: Alignment.center,
-                                    child: Obx(() =>
-                                        Text(
-                                          "${cartItem.count.value}",
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        )),
-                                  ),
-                                  RoundedIconButton(
-                                    icon: Icons.add,
-                                    onPress: () {
-                                      //cartItem.count(cartItem.count.value + 1);
-                                      controller.increaseCartItem(cartItem.id);
-                                    },
-                                    iconSize: 24,
-                                    fillColor: AppTheme.accentColor,
-                                    iconColor: Colors.white,
+                                  Text(
+                                    "Rs ${cartItem.amount.toStringAsFixed(2)}",
+                                    style: const TextStyle(
+                                        color: AppTheme.textColorDark,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   )
                                 ],
-                              ),
-
-                              Text(
-                                "Rs ${cartItem.amount.toStringAsFixed(2)}",
-                                style: const TextStyle(color: AppTheme.textColor, fontSize: 18, fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          )),
+                              )),
                         ],
                       ),
                     )),
@@ -116,12 +119,13 @@ class CartListItem extends StatelessWidget {
                 top: 0,
                 right: 0,
                 child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.close),
+                  onPressed: () {
+                    controller.removeItemFromCart(cartItem.id);
+                  },
+                  icon: const Icon(Icons.close),
                   padding: EdgeInsets.zero,
                   splashRadius: 1,
-                )
-            )
+                ))
           ],
         ),
       ),

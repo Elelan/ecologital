@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../data/category.dart';
+
 class Constants {
+
+  Constants._();
+
+  static const homeCategoryId = "";
+  static Category homeCategory = Category(id: Constants.homeCategoryId, name: "", image: "");
 
   static const snackbarDuration = Duration(seconds: 4);
 //colors

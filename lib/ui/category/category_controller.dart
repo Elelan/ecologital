@@ -1,112 +1,86 @@
-import 'package:ecologital/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../data/item.dart';
-import '../details/details_page.dart';
+import '../../data/category.dart';
+import '../../service/api_service.dart';
+import '../home/home_controller.dart';
 
 class CategoryController extends GetxController {
   final api = Get.find<ApiService>();
-  ScrollController scrollController = ScrollController();
+  final homeController = Get.find<HomeController>();
 
-  final _page = 1.obs;
+  // Used to display loading indicators when _firstLoad function is running
+  final _isFirstLoadRunning = false.obs;
 
-  int get page => _page.value;
-  var isMoreDataAvailable = true.obs;
-  var isDataProcessing = false.obs;
-  var fetchingMoreDta = false.obs;
+  bool get isFirstLoadRunning => _isFirstLoadRunning.value;
 
-  final _categoryId = "".obs;
+  // There is next page or not
+  final _hasNextPage = true.obs;
 
-  String get categoryId => _categoryId.value;
-  final itemList = List<Item>.empty().obs;
-  Item? selectedItem;
+  bool get hasNextPage => _hasNextPage.value;
 
-  @override
-  void onReady() {
-    super.onReady();
-    String? categoryId = Get.parameters['categoryId'];
-    String? categoryName = Get.parameters['categoryName'];
+  // Used to display loading indicators when _loadMore function is running
+  final _isLoadMoreRunning = false.obs;
 
-    // Fetch Data
-    getTask(categoryId!, page);
+  bool get isLoadMoreRunning => _isLoadMoreRunning.value;
 
-    //For Pagination
-    paginateTask();
+  final scrollController = ScrollController();
+
+  void initCategories(String categoryId) {
+    homeController.selectedCategoryId(categoryId);
+    fetchFirstItemListForCategory(categoryId);
+    paginateItems(categoryId);
   }
 
-  Item getItemById(String id) {
-    return itemList.firstWhere((element) => element.id==id);
-  }
-
-  // Fetch Data
-  void getTask(String categoryId, int page) async {
-    try {
-      isMoreDataAvailable(false);
-      isDataProcessing(true);
-
-      itemList.value = await api.fetchItems(categoryId: categoryId, page: page);
-
-      isDataProcessing(false);
-    } catch (exception) {
-      isDataProcessing(false);
-      showSnackBar("Exception", exception.toString(), Colors.red);
+  void fetchFirstItemListForCategory(String categoryId) async {
+    homeController.categoryList[homeController.getCategoryIndex(categoryId)]
+        .page(1);
+    _isFirstLoadRunning(true);
+    var itemsForCategory =
+        await api.fetchItems(categoryId: categoryId, page: 1);
+    if (itemsForCategory.isNotEmpty) {
+      var index = homeController.categoryList
+          .indexWhere((element) => element.id == categoryId);
+      homeController.categoryList[index].itemList.addAll(itemsForCategory);
+    } else {
+      _hasNextPage(false);
     }
+    _isFirstLoadRunning(false);
   }
 
-  // Refresh List
-  void refreshList() async {
-    _page.value = 1;
-    getTask(categoryId, page);
-  }
+  void fetchMoreItemListForCategory(String categoryId) async {
+    if (hasNextPage &&
+        !isFirstLoadRunning &&
+        !isLoadMoreRunning &&
+        scrollController.position.extentAfter < 300) {
+      {
+        _isLoadMoreRunning(true);
+        var currentPage = homeController.getCurrentPage(categoryId);
+        var nextPage = homeController
+            .categoryList[homeController.getCategoryIndex(categoryId)]
+            .page(currentPage + 1);
 
-  // Get More data
-  void getMoreTask(int page) async {
-    try {
-      fetchingMoreDta(true);
-      var newList = await api.fetchItems(categoryId: categoryId, page: page);
-      if(newList.isNotEmpty) {
-        isMoreDataAvailable(true);
-      } else {
-        isMoreDataAvailable(false);
-        showSnackBar("Message", "No more items", Colors.lightBlueAccent);
+        print("currentPage: $currentPage");
+        print("nextPage: $nextPage");
+        var moreItems =
+            await api.fetchItems(categoryId: categoryId, page: nextPage);
+
+        if (moreItems.isNotEmpty) {
+          homeController.addItemsToCategory(categoryId, moreItems);
+        } else {
+          _hasNextPage(false);
+        }
+        _isLoadMoreRunning(false);
       }
-      itemList.addAll(newList);
-      fetchingMoreDta(false);
-    } catch (exception) {
-      isMoreDataAvailable(false);
-      fetchingMoreDta(false);
-      showSnackBar("Exception", exception.toString(), Colors.red);
     }
   }
 
-  // For Pagination
-  void paginateTask() {
+  void paginateItems(String categoryId) {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        print("reached end");
-        _page.value++;
-        getMoreTask(page);
+        fetchMoreItemListForCategory(categoryId);
       }
     });
-  }
-
-  void navigateToDetail(String id) {
-    selectedItem = getItemById(id);
-    String route = DetailsPage.getRouteName(id);
-    Get.toNamed(route);
-  }
-
-  void updateFavourite(Item item, bool favourite) {
-    var index = itemList.indexWhere((element) => element.id == item.id);
-    itemList[index].isFavourite.toggle();
-  }
-
-  showSnackBar(String title, String message, Color backgroundColor) {
-    Get.snackbar(title, message,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: backgroundColor,
-        colorText: Colors.white);
   }
 }

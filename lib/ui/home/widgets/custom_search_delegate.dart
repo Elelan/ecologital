@@ -53,7 +53,8 @@ class CustomSearchDelegate extends SearchDelegate<Item?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var filteredList = controller.itemList.where((item) {
+    var allItems = controller.categoryList.expand((category) => category.itemList).toList();
+    var filteredList = allItems.where((item) {
       String queryText = query.toLowerCase();
       String itemName = item.name.toLowerCase();
       bool startsWith = itemName.startsWith(queryText);

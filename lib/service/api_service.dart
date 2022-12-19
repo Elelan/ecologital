@@ -22,10 +22,12 @@ class ApiService {
 
   Future<List<Item>> fetchItems({String categoryId = "", int page = 1}) async {
     var headers = {'api-key': Constants.apiKey};
-    // const url = "${Constants.baseUrl}/items";
-    var url = categoryId != ""
-        ? "${Constants.baseUrl}/items?page=$page&category_id=$categoryId"
-        : "${Constants.baseUrl}/items";
+    String url;
+    if (categoryId != "") {
+      url = "${Constants.baseUrl}/items?page=$page&category_id=$categoryId";
+    } else {
+      url = "${Constants.baseUrl}/items?page=$page";
+    }
     final uri = Uri.parse(url);
     final response = await http.get(uri, headers: headers);
     if (response.statusCode == 200) {

@@ -34,9 +34,9 @@ class CategorySection extends StatelessWidget {
                     ),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: controller.categoryList.length,
+                    itemCount: controller.categoryList.length - 1,
                     itemBuilder: (context, index) {
-                      Category cat = controller.categoryList[index];
+                      Category cat = controller.categoryList[index + 1];
                       return ActionChip(
                         elevation: 8.0,
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -50,7 +50,6 @@ class CategorySection extends StatelessWidget {
                         ),
                         onPressed: () {
                           var data = {
-                            "categoryId": cat.id,
                             "categoryName": cat.name
                           };
                           Get.toNamed(CategoryPage.getCategoryRoute(cat.id),

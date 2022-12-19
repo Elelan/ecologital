@@ -91,7 +91,7 @@ class ListItem extends StatelessWidget {
                       IconButton(
                           onPressed: () {
                             //item.isFavourite.toggle();
-                            controller.updateFavourite(item, item.isFavourite.value);
+                            controller.updateFavourite(item.id, item.isFavourite.value);
                           },
                           icon: Icon(
                             item.isFavourite.value ? Icons.favorite : Icons
