@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Constants {
+
+  static const snackbarDuration = Duration(seconds: 4);
 //colors
   static const appBarBackgroundColor = Color(0xFFC2DEEE);
   static const appBarTextColor = Color(0xFF020000);

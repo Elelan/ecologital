@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
 
   HomePage({Key? key}) : super(key: key);
 
-  final HomeController controller = Get.put(HomeController());
+  final HomeController controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {

@@ -12,6 +12,24 @@ class HomeController extends GetxController {
   final _categoryLoading = false.obs;
 
   bool get categoryLoading => _categoryLoading.value;
+
+  // Used to display loading indicators when _firstLoad function is running
+  final _isFirstLoadRunning = false.obs;
+
+  bool get isFirstLoadRunning => _isFirstLoadRunning.value;
+
+  // There is next page or not
+  final _hasNextPage = true.obs;
+
+  bool get hasNextPage => _hasNextPage.value;
+
+  // Used to display loading indicators when _loadMore function is running
+  final _isLoadMoreRunning = false.obs;
+
+  bool get isLoadMoreRunning => _isLoadMoreRunning.value;
+
+  final scrollController = ScrollController();
+
   var categoryList = List<Category>.empty().obs;
 
   final _itemLoading = false.obs;
@@ -33,26 +51,90 @@ class HomeController extends GetxController {
     _categoryLoading.value = false;
   }
 
+  void initCategories(String categoryId) {
+    fetchFirstItemListForCategory(categoryId);
+    paginateItems(categoryId);
+  }
+
   void fetchItems() async {
     _itemLoading.value = true;
     itemList.value = await api.fetchItems();
     _itemLoading.value = false;
   }
 
-  Item getItemById(String id) {
-    return itemList.firstWhere((element) => element.id==id);
+  void fetchFirstItemListForCategory(String categoryId) async {
+    categoryList[getCategoryIndex(categoryId)].page(1);
+    _isFirstLoadRunning(true);
+    var itemsForCategory =
+        await api.fetchItems(categoryId: categoryId, page: 1);
+    if (itemsForCategory.isNotEmpty) {
+      var index =
+          categoryList.indexWhere((element) => element.id == categoryId);
+      categoryList[index].itemList.addAll(itemsForCategory);
+    } else {
+      _hasNextPage(false);
+    }
+    _isFirstLoadRunning(false);
   }
 
+  void fetchMoreItemListForCategory(String categoryId) async {
+    if (hasNextPage &&
+        !isFirstLoadRunning &&
+        !isLoadMoreRunning &&
+        scrollController.position.extentAfter < 300) {
+      {
+        _isLoadMoreRunning(true);
+        var currentPage = getCurrentPage(categoryId);
+        var nextPage =
+            categoryList[getCategoryIndex(categoryId)].page(currentPage + 1);
+
+        print("currentPage: $currentPage");
+        print("nextPage: $nextPage");
+        var moreItems =
+            await api.fetchItems(categoryId: categoryId, page: nextPage);
+
+        if (moreItems.isNotEmpty) {
+          addItemsToCategory(categoryId, moreItems);
+        } else {
+          _hasNextPage(false);
+        }
+        _isLoadMoreRunning(false);
+      }
+    }
+  }
+
+  int getCategoryItemCount(String categoryId) =>
+      categoryList[getCategoryIndex(categoryId)].itemList.length;
+
+  void addItemsToCategory(String categoryId, List<Item> items) {
+    var categoryIndex =
+        categoryList.indexWhere((element) => element.id == categoryId);
+    categoryList[categoryIndex].itemList.addAll(items);
+  }
+
+  void paginateItems(String categoryId) {
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        fetchMoreItemListForCategory(categoryId);
+      }
+    });
+  }
+
+  int getCategoryIndex(String id) =>
+      categoryList.indexWhere((element) => element.id == id);
+
+  int getCurrentPage(String categoryId) =>
+      categoryList[getCategoryIndex(categoryId)].page.value;
+
+  Item getItemById(String id) {
+    return itemList.firstWhere((element) => element.id == id);
+  }
 
   void navigateToDetail(String id) {
     selectedItem = getItemById(id);
     String route = DetailsPage.getRouteName(id);
     Get.toNamed(route);
-  }
-
-  void updateFavouriteList(String id, bool isFavourite) {
-    var index = itemList.indexWhere((element) => element.id == id);
-    itemList[index].isFavourite.toggle();
   }
 
   void updateFavourite(Item item, bool favourite) {

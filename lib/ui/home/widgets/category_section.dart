@@ -53,28 +53,11 @@ class CategorySection extends StatelessWidget {
                             "categoryId": cat.id,
                             "categoryName": cat.name
                           };
-                          Get.toNamed(CategoryPage.routeName,
+                          Get.toNamed(CategoryPage.getCategoryRoute(cat.id),
                               parameters: data);
                         },
                         backgroundColor: AppTheme.accentColor,
-                        // shape: StadiumBorder(
-                        //     side: BorderSide(
-                        //       width: 1,
-                        //       color: Colors.redAccent,
-                        //     )),
                       );
-                      // return ActionChip(
-                      //   avatar: Image.network(
-                      //     cat.image,
-                      //     color: Colors.white,
-                      //   ),
-                      //   label: Text(cat.name),
-                      //   padding: const EdgeInsets.symmetric(
-                      //       vertical: 12, horizontal: 16),
-                      //   labelStyle: AppTheme.buildAppTheme()
-                      //       .textTheme
-                      //       .labelMedium,
-                      // );
                     },
                   ),
         ));

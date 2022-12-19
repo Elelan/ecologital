@@ -15,7 +15,7 @@ class Item {
   String categoryId;
   @JsonKey(name: "categoty_name")
   String categoryName;
-  int price;
+  double price;
   @JsonKey(name: "unit_type")
   List<UnitType>? unitType;
   String description;

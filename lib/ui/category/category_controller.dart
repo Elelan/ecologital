@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../data/item.dart';
+import '../details/details_page.dart';
 
 class CategoryController extends GetxController {
   final api = Get.find<ApiService>();
@@ -19,6 +20,7 @@ class CategoryController extends GetxController {
 
   String get categoryId => _categoryId.value;
   final itemList = List<Item>.empty().obs;
+  Item? selectedItem;
 
   @override
   void onReady() {
@@ -31,6 +33,10 @@ class CategoryController extends GetxController {
 
     //For Pagination
     paginateTask();
+  }
+
+  Item getItemById(String id) {
+    return itemList.firstWhere((element) => element.id==id);
   }
 
   // Fetch Data
@@ -84,6 +90,17 @@ class CategoryController extends GetxController {
         getMoreTask(page);
       }
     });
+  }
+
+  void navigateToDetail(String id) {
+    selectedItem = getItemById(id);
+    String route = DetailsPage.getRouteName(id);
+    Get.toNamed(route);
+  }
+
+  void updateFavourite(Item item, bool favourite) {
+    var index = itemList.indexWhere((element) => element.id == item.id);
+    itemList[index].isFavourite.toggle();
   }
 
   showSnackBar(String title, String message, Color backgroundColor) {

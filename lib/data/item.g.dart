@@ -12,7 +12,7 @@ Item _$ItemFromJson(Map<String, dynamic> json) => Item(
       image: json['image'] as String,
       categoryId: json['category_id'] as String,
       categoryName: json['categoty_name'] as String,
-      price: json['price'] as int,
+      price: (json['price'] as num).toDouble(),
       unitType: (json['unit_type'] as List<dynamic>?)
           ?.map((e) => UnitType.fromJson(e as Map<String, dynamic>))
           .toList(),

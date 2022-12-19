@@ -1,3 +1,4 @@
+import 'package:ecologital/ui/home/home_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,11 +25,8 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        // home: Theme(
-        //     data: AppTheme.buildAppTheme(),
-        //     child: MyStoreApp()
-        // ),
         initialRoute: HomePage.routeName,
+        initialBinding: HomeBinding(),
         getPages: [
           GetPage(name: HomePage.routeName, page: () => HomePage()),
           GetPage(name: CartPage.routeName, page: () => CartPage()),
