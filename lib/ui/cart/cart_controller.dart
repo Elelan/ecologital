@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:ecologital/service/api_service.dart';
-import 'package:ecologital/utils/theme.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../data/cart.dart';
 import '../../data/item.dart';
 import '../../data/unit_type.dart';
+import '../../service/api_service.dart';
+import '../../utils/theme.dart';
 
 class CartController extends GetxController {
   final api = Get.find<ApiService>();
@@ -41,7 +41,8 @@ class CartController extends GetxController {
   }
 
   void addToCartList(Item item, int quantity, UnitType? type) {
-    var itemExists = cartItems.firstWhereOrNull((element) => element.id == item.id);
+    var itemExists =
+        cartItems.firstWhereOrNull((element) => element.id == item.id);
     Cart newCartItem;
     var amount = 0.0;
     if (type != null) {
@@ -52,7 +53,8 @@ class CartController extends GetxController {
     if (itemExists != null) {
       itemExists.count(quantity);
       itemExists.totalPrice(amount);
-      var index = cartItems.indexWhere((element) => element.id == itemExists.id);
+      var index =
+          cartItems.indexWhere((element) => element.id == itemExists.id);
       cartItems[index] = itemExists;
     } else {
       var name = _buildCartItemName(item, type);
