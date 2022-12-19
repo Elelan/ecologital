@@ -75,7 +75,6 @@ class HomePage extends StatelessWidget {
                       ),
                     );
                   }
-
                   return Column(
                     children: [
                       ListView.separated(
@@ -113,7 +112,9 @@ class HomePage extends StatelessWidget {
                     ],
                   );
                 })),
-          ),
+
+
+          )
         ],
       ),
     );

@@ -18,7 +18,7 @@ class CategorySection extends StatelessWidget {
           height: 60.0,
           child: controller.categoryLoading
               ? const Center(
-                  child: CircularProgressIndicator(
+                  child: LinearProgressIndicator(
                     color: AppTheme.accentColor,
                   ),
                 )

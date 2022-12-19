@@ -139,12 +139,11 @@ class HomeController extends GetxController {
       categoryList[getCategoryIndex(categoryId)].page.value;
 
   void navigateToDetail(String id) {
-    navigateToDetailFromCategory("", id);
+    navigateToDetailFromCategory(selectedCategoryId.value, id);
   }
 
   void navigateToDetailFromCategory(String categoryId, String id) {
-    var category =
-        categoryList.firstWhereOrNull((category) => category.id == categoryId);
+    var category = categoryList.firstWhereOrNull((category) => category.id == categoryId);
     var item = category?.itemList.firstWhereOrNull((item) => item.id == id);
     if (item != null) {
       selectedItem = item;
