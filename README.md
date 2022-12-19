@@ -5,6 +5,10 @@ Ecologital Assignment Flutter (SSE)
 In this project, I use [GetX](https://pub.dev/packages/get) for state management, [http](https://pub.dev/packages/http)
 for HTTP client, [json_serializable](https://pub.dev/packages/json_serializable) for serialization
 
+### Choosing the State Management GetX
+- Easy and Extra light state management framework
+- Has additional routing features
+- Easy dependency injection
 
 ## Getting Started
 
