@@ -5,10 +5,12 @@ import "package:http/http.dart" as http;
 
 import '../app/constants.dart';
 import '../data/category.dart';
+import 'models/order_response.dart';
 
 class ApiService {
+  var headers = {'api-key': Constants.apiKey};
+
   Future<List<Category>> fetchCategories() async {
-    var headers = {'api-key': Constants.apiKey};
     const url = "${Constants.baseUrl}/categories";
     final uri = Uri.parse(url);
     final response = await http.get(uri, headers: headers);
@@ -21,7 +23,6 @@ class ApiService {
   }
 
   Future<List<Item>> fetchItems({String categoryId = "", int page = 1}) async {
-    var headers = {'api-key': Constants.apiKey};
     String url;
     if (categoryId != "") {
       url = "${Constants.baseUrl}/items?page=$page&category_id=$categoryId";
@@ -36,5 +37,23 @@ class ApiService {
       return items;
     }
     return [];
+  }
+
+  Future<OrderResponse?> placeOrder(String id) async {
+    const url = "${Constants.baseUrl}/placeorder";
+    final uri = Uri.parse(url);
+
+    final response = await http.post(
+      uri,
+      headers: headers,
+      body: jsonEncode(<String, String>{
+        'id': id,
+      }),
+    );
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      return OrderResponse.fromJson(json);
+    }
+    return null;
   }
 }

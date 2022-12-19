@@ -1,15 +1,21 @@
 import 'dart:convert';
 
+import 'package:ecologital/service/api_service.dart';
+import 'package:ecologital/utils/theme.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/cart.dart';
-import '../../data/cart_item.dart';
 import '../../data/item.dart';
 import '../../data/unit_type.dart';
 
 class CartController extends GetxController {
-  // var cartItems = List<CartItem>.empty().obs;
+  final api = Get.find<ApiService>();
+
+  final _isPlacingOrder = false.obs;
+
+  bool get isPlacingOrder => _isPlacingOrder.value;
+
   var cartItems = List<Cart>.empty().obs;
 
   var totalAmount = 0.0.obs;
@@ -23,19 +29,20 @@ class CartController extends GetxController {
   void loadInitialCart() async {
     final prefs = await SharedPreferences.getInstance();
     final String? cartString = prefs.getString('cart');
-    if(cartString != null && cartString.isNullOrBlank == false) {
+    if (cartString != null && cartString.isNullOrBlank == false) {
       final json = jsonDecode(cartString) as List;
       final items = json.map((item) => Cart.fromJson(item)).toList();
-      if(cartItems.isEmpty) {
+      if (cartItems.isEmpty) {
         cartItems.addAll(items);
         updateTotal();
       }
     }
+    updateTotal();
   }
 
   void addToCartList(Item item, int quantity, UnitType? type) {
     var itemExists =
-    cartItems.firstWhereOrNull((element) => element.id == item.id);
+        cartItems.firstWhereOrNull((element) => element.id == item.id);
     Cart newCartItem;
     var amount = 0.0;
     if (type != null) {
@@ -55,14 +62,14 @@ class CartController extends GetxController {
           count: RxInt(quantity),
           unitPrice: RxDouble(type != null ? type.price : item.price),
           totalPrice: RxDouble(amount),
-      image: item.image);
+          image: item.image);
       cartItems.add(newCartItem);
     }
 
     updateCartStorage(cartItems);
   }
 
-  void updateCartStorage(List<Cart> cartItems) async{
+  void updateCartStorage(List<Cart> cartItems) async {
     try {
       var dynamic = cartItems.map((item) => item.toJson()).toList();
       var encoded = jsonEncode(dynamic);
@@ -82,7 +89,8 @@ class CartController extends GetxController {
     var index = cartItems.indexWhere((element) => element.id == id);
     var cartItem = cartItems[index];
     var newCount = cartItem.count > 1 ? cartItem.count - 1 : cartItem.count;
-    var newAmount = calculateCartItemAmount(newCount.value, cartItem.unitPrice.value);
+    var newAmount =
+        calculateCartItemAmount(newCount.value, cartItem.unitPrice.value);
     updateCartItem(index, newCount.value, newAmount);
   }
 
@@ -90,7 +98,8 @@ class CartController extends GetxController {
     var index = cartItems.indexWhere((element) => element.id == id);
     var cartItem = cartItems[index];
     var newCount = cartItem.count + 1;
-    var newAmount = calculateCartItemAmount(newCount.value, cartItem.unitPrice.value);
+    var newAmount =
+        calculateCartItemAmount(newCount.value, cartItem.unitPrice.value);
     updateCartItem(index, newCount.value, newAmount);
   }
 
@@ -102,11 +111,14 @@ class CartController extends GetxController {
   }
 
   void updateTotal() {
-    if(cartItems.isNotEmpty) {
-      var amount = cartItems.map((item) => item.totalPrice.value)
+    if (cartItems.isNotEmpty) {
+      var amount = cartItems
+          .map((item) => item.totalPrice.value)
           .toList()
           .reduce((price1, price2) => price1 + price2);
       totalAmount(amount);
+    } else {
+      totalAmount(0);
     }
   }
 
@@ -129,6 +141,39 @@ class CartController extends GetxController {
       cartItems.removeAt(cartItemIndex(id));
       updateTotal();
       updateCartStorage(cartItems);
+    }
+  }
+
+  void clearCart() {
+    cartItems.clear();
+    updateCartStorage(cartItems);
+    updateTotal();
+  }
+
+  void placeOrder() async {
+    _isPlacingOrder(true);
+    final orderRes = await api.placeOrder(cartItems.first.id);
+    _isPlacingOrder(false);
+
+    if (orderRes != null) {
+      Get.defaultDialog(
+          buttonColor: AppTheme.accentColor,
+          confirmTextColor: AppTheme.textColorLight,
+          title: "Success",
+          middleText: orderRes.message,
+          onConfirm: () {
+            clearCart();
+            Get.back();
+          });
+    } else {
+      Get.defaultDialog(
+          buttonColor: AppTheme.accentColor,
+          confirmTextColor: AppTheme.textColorLight,
+          title: "Error",
+          middleText: "Couldn't place order",
+          onConfirm: () {
+            Get.back();
+          });
     }
   }
 }
