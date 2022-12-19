@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:ecologital/service/api_service.dart';
 import 'package:ecologital/utils/theme.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../data/cart.dart';
 import '../../data/item.dart';
@@ -11,6 +11,7 @@ import '../../data/unit_type.dart';
 
 class CartController extends GetxController {
   final api = Get.find<ApiService>();
+  final box = GetStorage();
 
   final _isPlacingOrder = false.obs;
 
@@ -27,8 +28,7 @@ class CartController extends GetxController {
   }
 
   void loadInitialCart() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? cartString = prefs.getString('cart');
+    final String? cartString = box.read('cart');
     if (cartString != null && cartString.isNullOrBlank == false) {
       final json = jsonDecode(cartString) as List;
       final items = json.map((item) => Cart.fromJson(item)).toList();
@@ -41,8 +41,7 @@ class CartController extends GetxController {
   }
 
   void addToCartList(Item item, int quantity, UnitType? type) {
-    var itemExists =
-        cartItems.firstWhereOrNull((element) => element.id == item.id);
+    var itemExists = cartItems.firstWhereOrNull((element) => element.id == item.id);
     Cart newCartItem;
     var amount = 0.0;
     if (type != null) {
@@ -53,7 +52,8 @@ class CartController extends GetxController {
     if (itemExists != null) {
       itemExists.count(quantity);
       itemExists.totalPrice(amount);
-      cartItems.add(itemExists);
+      var index = cartItems.indexWhere((element) => element.id == itemExists.id);
+      cartItems[index] = itemExists;
     } else {
       var name = _buildCartItemName(item, type);
       newCartItem = Cart(
@@ -73,8 +73,7 @@ class CartController extends GetxController {
     try {
       var dynamic = cartItems.map((item) => item.toJson()).toList();
       var encoded = jsonEncode(dynamic);
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString("cart", encoded);
+      box.write("cart", encoded);
     } catch (error) {
       error.printError();
     }

@@ -1,6 +1,7 @@
 import 'package:ecologital/ui/home/home_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'service/api_service.dart';
 import 'ui/cart/cart_page.dart';
@@ -9,7 +10,8 @@ import 'ui/details/details_page.dart';
 import 'ui/home/home_page.dart';
 import 'utils/theme.dart';
 
-void main() {
+void main() async{
+  await GetStorage.init();
   runApp(const MyApp());
 }
 

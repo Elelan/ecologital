@@ -42,7 +42,7 @@ dependencies:
   http:
   intl:
   cached_network_image:
-  shared_preferences:
+  get_storage:
 #  badges:
 
 dev_dependencies:
