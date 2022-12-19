@@ -6,7 +6,9 @@ import '../../utils/theme.dart';
 import '../home/home_controller.dart';
 
 class DetailsPage extends StatelessWidget {
-  static const routeName = "/detail";
+  static const routeName = "/detail/:id";
+
+  static String getRouteName(String id) => "/detail/${id}";
 
   DetailsPage({Key? key}) : super(key: key);
 
@@ -17,6 +19,13 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    if(Get.parameters["id"] == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     if (controller.selectedItem == null) {
       controller.showSnackBar(
           "Not found", "Details of item not found", Colors.redAccent);
@@ -36,8 +45,14 @@ class DetailsPage extends StatelessWidget {
               pinned: false,
               stretch: false,
               floating: true,
-              expandedHeight: MediaQuery.of(context).size.height * 0.4,
-              collapsedHeight: MediaQuery.of(context).size.height * 0.1,
+              expandedHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.4,
+              collapsedHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.1,
               flexibleSpace: FlexibleSpaceBar(
                 stretchModes: const [StretchMode.zoomBackground],
                 background: CachedNetworkImage(
@@ -70,173 +85,184 @@ class DetailsPage extends StatelessWidget {
             ),
             SliverList(
                 delegate: SliverChildListDelegate([
-              Container(
-                height: MediaQuery.of(context).size.height * 0.55,
-                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Container(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.55,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          controller.selectedItem!.name,
-                          style: AppTheme.titleStyle,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            controller.updateFavourite(controller.selectedItem!,
-                                !controller.selectedItem!.isFavourite);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
-                            padding: EdgeInsets.zero,
-                            backgroundColor: AppTheme.accentColor,
-                            // <-- Button color
-                            foregroundColor:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              controller.selectedItem!.name,
+                              style: AppTheme.titleStyle,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                controller.updateFavourite(
+                                    controller.selectedItem!,
+                                    controller.selectedItem!.isFavourite.value);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: CircleBorder(),
+                                padding: EdgeInsets.zero,
+                                backgroundColor: AppTheme.accentColor,
+                                // <-- Button color
+                                foregroundColor:
                                 AppTheme.bgColor, // <-- Splash color
-                          ),
-                          child: Obx(() => Icon(
-                              controller.isSelectedFavourite
-                                  ? Icons.favorite
-                                  : Icons.favorite_outline,
-                              color: AppTheme.bgColor)),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Wrap(
-                      direction: Axis.horizontal,
-                      // runSpacing: 8,
-                      spacing: 6,
-                      alignment: WrapAlignment.start,
-                      children: List<Widget>.generate(
-                          unitTypes != null ? unitTypes.length : 0,
-                          (index) => Obx(() {
-                                var unit =
+                              ),
+                              child: Obx(() =>
+                                  Icon(
+                                      controller.selectedItem!.isFavourite.value
+                                          ? Icons.favorite
+                                          : Icons.favorite_outline,
+                                      color: AppTheme.bgColor)),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Wrap(
+                          direction: Axis.horizontal,
+                          // runSpacing: 8,
+                          spacing: 6,
+                          alignment: WrapAlignment.start,
+                          children: List<Widget>.generate(
+                              unitTypes != null ? unitTypes.length : 0,
+                                  (index) =>
+                                  Obx(() {
+                                    var unit =
                                     controller.selectedItem!.unitType![index];
-                                var chipSelected =
-                                    selectedUnitIndex.value == index;
-                                return ChoiceChip(
-                                    onSelected: (isSelected) {
-                                      if (isSelected) {
-                                        selectedUnitIndex(index);
+                                    var chipSelected =
+                                        selectedUnitIndex.value == index;
+                                    return ChoiceChip(
+                                        onSelected: (isSelected) {
+                                          if (isSelected) {
+                                            selectedUnitIndex(index);
+                                          }
+                                        },
+                                        selectedColor: AppTheme.accentColor,
+                                        label: Text(
+                                          unit.value,
+                                          style: TextStyle(
+                                              color: chipSelected
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                        ),
+                                        selected: chipSelected);
+                                  })).toList(),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Rs $amount",
+                              style: AppTheme.moneyStyle,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  RoundedIconButton(
+                                    icon: Icons.remove,
+                                    onPress: () {
+                                      if (itemNumber.value > 0) {
+                                        itemNumber(itemNumber.value - 1);
                                       }
                                     },
-                                    selectedColor: AppTheme.accentColor,
-                                    label: Text(
-                                      unit.value,
-                                      style: TextStyle(
-                                          color: chipSelected
-                                              ? Colors.white
-                                              : Colors.black),
-                                    ),
-                                    selected: chipSelected);
-                              })).toList(),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Rs $amount",
-                          style: AppTheme.moneyStyle,
+                                    iconSize: 36,
+                                    fillColor: Colors.grey.shade300,
+                                    iconColor: Colors.black,
+                                  ),
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: Obx(() =>
+                                        Text(
+                                          "${itemNumber.value}",
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        )),
+                                  ),
+                                  RoundedIconButton(
+                                    icon: Icons.add,
+                                    onPress: () {
+                                      itemNumber(itemNumber.value + 1);
+                                    },
+                                    iconSize: 36,
+                                    fillColor: AppTheme.accentColor,
+                                    iconColor: Colors.white,
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              RoundedIconButton(
-                                icon: Icons.remove,
-                                onPress: () {
-                                  if (itemNumber.value > 0) {
-                                    itemNumber(itemNumber.value - 1);
-                                  }
-                                },
-                                iconSize: 36,
-                                fillColor: Colors.grey.shade300,
-                                iconColor: Colors.black,
-                              ),
-                              Container(
-                                width: 50,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child: Obx(() => Text(
-                                      "${itemNumber.value}",
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    )),
-                              ),
-                              RoundedIconButton(
-                                icon: Icons.add,
-                                onPress: () {
-                                  itemNumber(itemNumber.value + 1);
-                                },
-                                iconSize: 36,
-                                fillColor: AppTheme.accentColor,
-                                iconColor: Colors.white,
-                              )
-                            ],
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        const Divider(
+                          height: 3,
+                          thickness: 3,
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        const Text(
+                          "Description",
+                          style: AppTheme.titleStyle,
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Flexible(
+                          child: Text(
+                            controller.selectedItem!.description,
+                            style: TextStyle(
+                                height: 1.5,
+                                color: AppTheme.textColor.withOpacity(0.8)),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          height: 50,
+                          elevation: 0,
+                          color: AppTheme.accentColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: const Center(
+                            child: Text(
+                              "Add to cart",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         )
                       ],
                     ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    const Divider(
-                      height: 3,
-                      thickness: 3,
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    const Text(
-                      "Description",
-                      style: AppTheme.titleStyle,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Flexible(
-                      child: Text(
-                        controller.selectedItem!.description,
-                        style: TextStyle(
-                            height: 1.5,
-                            color: AppTheme.textColor.withOpacity(0.8)),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    MaterialButton(
-                      onPressed: () {},
-                      height: 50,
-                      elevation: 0,
-                      color: AppTheme.accentColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
-                        child: Text(
-                          "Add to cart",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ]))
+                  )
+                ]))
           ],
         ),
       ),
@@ -245,13 +271,12 @@ class DetailsPage extends StatelessWidget {
 }
 
 class RoundedIconButton extends StatelessWidget {
-  const RoundedIconButton(
-      {super.key,
-      required this.icon,
-      required this.onPress,
-      required this.iconSize,
-      required this.fillColor,
-      required this.iconColor});
+  const RoundedIconButton({super.key,
+    required this.icon,
+    required this.onPress,
+    required this.iconSize,
+    required this.fillColor,
+    required this.iconColor});
 
   final IconData icon;
   final void Function()? onPress;

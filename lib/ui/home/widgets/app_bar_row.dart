@@ -40,7 +40,7 @@ class AppBarRow extends StatelessWidget {
                   final result = await showSearch(
                       context: context, delegate: CustomSearchDelegate());
                   if (result != null) {
-                    controller.navigateToDetail(result);
+                    controller.navigateToDetail(result.id);
                   }
                   focusNode.unfocus();
                   focusNode.removeListener(() { });

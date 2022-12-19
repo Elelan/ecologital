@@ -10,20 +10,20 @@ const double imageHeight = 120;
 
 class ListItem extends StatelessWidget {
 
-  ListItem({Key? key, required this.item, required this.onClick})
+  ListItem({Key? key, required this.item})
       : super(key: key);
 
   final controller = Get.find<HomeController>();
 
   final Item item;
-  final void Function()? onClick;
-  var isFavourite = false.obs;
 
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onClick,
+      onTap: (){
+        controller.navigateToDetail(item.id);
+      },
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -90,11 +90,11 @@ class ListItem extends StatelessWidget {
                   child: Obx(() =>
                       IconButton(
                           onPressed: () {
-                            isFavourite(!isFavourite.value);
-                            controller.updateFavourite(item, isFavourite.value);
+                            //item.isFavourite.toggle();
+                            controller.updateFavourite(item, item.isFavourite.value);
                           },
                           icon: Icon(
-                            isFavourite.value ? Icons.favorite : Icons
+                            item.isFavourite.value ? Icons.favorite : Icons
                                 .favorite_border,
                             color: AppTheme.accentColor,
                           ))),

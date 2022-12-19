@@ -20,9 +20,6 @@ class HomeController extends GetxController {
   var itemList = List<Item>.empty().obs;
   Item? selectedItem;
 
-  final _isSelectedFavourite = false.obs;
-  bool get isSelectedFavourite => _isSelectedFavourite.value;
-
   @override
   void onInit() {
     super.onInit();
@@ -42,16 +39,25 @@ class HomeController extends GetxController {
     _itemLoading.value = false;
   }
 
-  void navigateToDetail(Item itemSelected) {
-    selectedItem = itemSelected;
-    _isSelectedFavourite(itemSelected.isFavourite);
-    Get.toNamed(DetailsPage.routeName);
+  Item getItemById(String id) {
+    return itemList.firstWhere((element) => element.id==id);
+  }
+
+
+  void navigateToDetail(String id) {
+    selectedItem = getItemById(id);
+    String route = DetailsPage.getRouteName(id);
+    Get.toNamed(route);
+  }
+
+  void updateFavouriteList(String id, bool isFavourite) {
+    var index = itemList.indexWhere((element) => element.id == id);
+    itemList[index].isFavourite.toggle();
   }
 
   void updateFavourite(Item item, bool favourite) {
     var index = itemList.indexWhere((element) => element.id == item.id);
-    itemList[index].isFavourite = favourite;
-    _isSelectedFavourite(favourite);
+    itemList[index].isFavourite.toggle();
   }
 
   showSnackBar(String title, String message, Color backgroundColor) {

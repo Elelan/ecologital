@@ -40,12 +40,7 @@ class ItemSection extends StatelessWidget {
             itemCount: controller.itemList.length,
             itemBuilder: (context, index) {
               var item = controller.itemList[index];
-              return ListItem(
-                item: item,
-                onClick: () {
-                  controller.navigateToDetail(item);
-                },
-              );
+              return ListItem(item: item,);
             }
         )
         )

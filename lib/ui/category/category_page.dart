@@ -47,16 +47,14 @@ class CategoryPage extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8),
                   physics: const BouncingScrollPhysics(),
                   separatorBuilder: (context, index) => const SizedBox(
-                      height: 6,
-                    ),
+                        height: 6,
+                      ),
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   itemCount: controller.itemList.length,
                   itemBuilder: (context, index) => ListItem(
                         item: controller.itemList[index],
-                        onClick: () {},
                       )),
-
             ],
           );
         }),

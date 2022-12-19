@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'unit_type.dart';
@@ -20,7 +21,7 @@ class Item {
   String description;
 
   @JsonKey(ignore: true)
-  bool isFavourite = false;
+  var isFavourite = false.obs;
 
   Item(
       {required this.id,
