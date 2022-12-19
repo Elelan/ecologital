@@ -31,7 +31,7 @@ class ListItem extends StatelessWidget {
         ),
         // clipBehavior: Clip.antiAlias,
         child: Container(
-          height: 120,
+          height: 130,
           padding: const EdgeInsets.all(8),
           child: Row(children: [
             Expanded(
