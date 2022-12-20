@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:badges/badges.dart';
 
 import '../../../utils/theme.dart';
 import '../../cart/cart_controller.dart';
@@ -27,8 +28,8 @@ class AppBarRow extends StatelessWidget {
                 Get.toNamed(CartPage.routeName);
               },
               icon: Obx(() => Badge(
-                    isLabelVisible: cartController.cartItems.isNotEmpty,
-                    label: Text("${cartController.cartItems.length}"),
+                    showBadge: cartController.cartItems.isNotEmpty,
+                    badgeContent: Text("${cartController.cartItems.length}", style: TextStyle(color: AppTheme.textColorLight),),
                     child: const Icon(
                       Icons.shopping_cart_outlined,
                       color: AppTheme.textColorDark,
@@ -51,9 +52,9 @@ class AppBarRow extends StatelessWidget {
                   focusNode.unfocus();
                   focusNode.removeListener(() {});
                 },
-                onTapOutside: (event) {
-                  focusNode.unfocus();
-                },
+                // onTapOutside: (event) {
+                //   focusNode.unfocus();
+                // },
                 decoration: const InputDecoration(
                     prefixIcon: Icon(
                       Icons.search,
